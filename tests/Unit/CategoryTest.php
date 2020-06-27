@@ -3,8 +3,10 @@
 namespace Tests\Unit;
 
 use App\Models\Category;
+use App\Models\Genre;
 use App\Models\Traits\Uuid;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,8 +14,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryTest extends TestCase
 {
+    use DatabaseMigrations;
+    
     public function testIfUseTraits()
     {
+        Genre::create(['name' => 'test']);
         $traits = [SoftDeletes::class, Uuid::class];
         $categoryTraits = array_keys(class_uses(Category::class));
 
