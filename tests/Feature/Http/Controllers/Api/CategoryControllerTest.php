@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use Tests\TestCase;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\TestCase;
 
 use Tests\Traits\TestSaves;
 use Tests\Traits\TestValidations;
@@ -67,61 +67,23 @@ class CategoryControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $category = factory(Category::class)->create([
+        $this->category = factory(Category::class)->create([
             'description' => 'description',
             'is_active' => false
         ]);
-        $response = $this->json(
-            'PUT',
-            route('categories.update', ['category' => $category->id]),
-            [
-                'name' => 'test',
-                'description' => 'test',
-                'is_active' => true
-            ]
-        );
 
-        $id = $response->json('id');
-        $category = Category::find($id);
+        $data = ['name' => 'test', 'description' => 'test', 'is_active' => true];
+        $response = $this->assertUpdate($data, $data + ['deleted_at' => null]);
+        $response->assertJsonStructure(['created_at', 'updated_at']);
 
-        $response
-            ->assertStatus(200)
-            ->assertJson($category->toArray())
-            ->assertJsonFragment([
-                'description' => 'test',
-                'is_active' => true
-            ]);
+        $data = ['name' => 'test', 'description' => ''];
+        $this->assertUpdate($data, array_merge($data, ['description' => null]));
 
-        $response = $this->json(
-            'PUT',
-            route('categories.update', ['category' => $category->id]),
-            [
-                'name' => 'test',
-                'description' => ''
-            ]
-        );   
-        
-        $response            
-            ->assertJsonFragment([
-                'description' => null
-            ]);  
-                        
-        $category->description = 'test';
-        $category->save();
+        $data['description'] = 'test';
+        $this->assertUpdate($data, array_merge($data, ['description' => 'test']));
 
-        $response = $this->json(
-            'PUT',
-            route('categories.update', ['category' => $category->id]),
-            [
-                'name' => 'test',
-                'description' => null
-            ]
-        );   
-        
-        $response            
-            ->assertJsonFragment([
-                'description' => null
-            ]);          
+        $data['description'] = null;
+        $this->assertUpdate($data, array_merge($data, ['description' => null]));                              
     }  
     
     public function testDestroy()
