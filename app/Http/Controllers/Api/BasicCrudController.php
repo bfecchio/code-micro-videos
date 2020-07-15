@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 abstract class BasicCrudController extends Controller
 {
     protected abstract function model();
+    protected abstract function rulesStore();
 
     private $rules = [
         'name' => 'required|max:255',
@@ -18,6 +19,16 @@ abstract class BasicCrudController extends Controller
     public function index()
     {
         return $this->model()::all();
+    }
+
+    public function store (Request $request)
+    {
+        $validateData = $this->validate($request, $this->rulesStore());
+        
+        $obj = $this->model()::create($validateData);
+        $obj->refresh();
+
+        return $obj;
     }
 
     // public function store(Request $request)
