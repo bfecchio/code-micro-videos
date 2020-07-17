@@ -2,15 +2,13 @@
 
 namespace Tests\Unit\Models;
 
+use Tests\TestCase;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Models\Genre;
 use App\Models\Traits\Uuid;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-
-class GenreTest extends TestCase
+class GenreUnitTest extends TestCase
 {
     private $genre;
 

@@ -2,16 +2,13 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Category;
-use App\Models\Genre;
-use App\Models\Traits\Uuid;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Category;
+use App\Models\Traits\Uuid;
 
-class CategoryTest extends TestCase
+class CategoryUnitTest extends TestCase
 {
     private $category;
 
