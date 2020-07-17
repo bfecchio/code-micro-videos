@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 abstract class BasicCrudController extends Controller
 {
     protected abstract function model();
     protected abstract function rulesStore();
+    protected abstract function rulesUpdate();
 
     private $rules = [
         'name' => 'required|max:255',
@@ -39,21 +39,27 @@ abstract class BasicCrudController extends Controller
         return $this->model()::where($keyName, $id)->firstOrFail();
     }
 
-    // public function show(Category $category)
-    // {
-    //     return $category;
-    // }
+    public function show($id)
+    {
+        $obj = $this->findOrFail($id);
+        
+        return $obj;
+    }
 
-    // public function update(Request $request, Category $category)
-    // {
-    //     $this->validate($request, $this->rules);
-    //     $category->update($request->all());
-    //     return $category;
-    // }
+    public function update(Request $request, $id)
+    {
+        $obj = $this->findOrFail($id);
+        $validateData = $this->validate($request, $this->rulesUpdate());
+        $obj->update($validateData);
 
-    // public function destroy(Category $category)
-    // {
-    //     $category->delete();
-    //     return response()->noContent();
-    // }
+        return $obj;
+    }
+
+    public function destroy($id)
+    {
+        $obj = $this->findOrFail($id);
+        $obj->delete();
+
+        return response()->noContent();
+    }
 }

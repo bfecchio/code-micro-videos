@@ -9,9 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Traits\TestSaves;
 use Tests\Traits\TestValidations;
 
-
-use Illuminate\Foundation\Testing\TestResponse;
-
 class GenreControllerTest extends TestCase
 {
     use DatabaseMigrations, TestValidations, TestSaves;
